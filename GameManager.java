@@ -14,75 +14,80 @@ class GameManager extends Thread
                 start();
                 startPlayers();
         }
-       void startPlayers()
-       { for(int i=0;i<playersList.size();i++)
-           playersList.get(i).start();
-       }
-	public static void main(String[] arg)
+		
+		void startPlayers()
+		{ for(int i=0;i<playersList.size();i++)
+			playersList.get(i).start();
+		}
+		
+		public static void main(String[] arg)
         {
-	GameManager gm=new GameManager();  	
+			GameManager gm=new GameManager();  	
         }
 
-public void run() 
-{ 
-Player round_Winner,game_Winner;
+		public void run() 
+		{ 
+			Player round_Winner,game_Winner;
 
-} // end of run
-	Player gameWinner() 
-        {
-		Player winner=playersList.get(0);
-		for(Player player: playersList){
-			if(player.getroundsWon()>winner.getroundsWon())
-				winner=player;
-		}
-		return winner;
-	}
+		} // end of run
 
-	Player roundWinner()
-        {
-		ArrayList<Card> cardsOnTable=table.getroundCards();
-		Card maxCard=cardsOnTable.get(0);
-		Player roundWinner=null;
-		int turnMaxCard=1,cardCount=1;;
-		for(Card c : cardsOnTable){
-			if(c.gettotalWeight()>maxCard.gettotalWeight())
-                        {
-				maxCard=c;
-				turnMaxCard=cardCount;
+		Player gameWinner() 
+		{
+			Player winner=playersList.get(0);
+			for(Player player: playersList){
+				if(player.getroundsWon()>winner.getroundsWon())
+					winner=player;
 			}
-				cardCount++;
+			return winner;
 		}
-		boolean winnerFound=false;
-		int player=1;
-		while(!winnerFound && player<5){
-			if(playersList.get(player-1).getTurn()==turnMaxCard){
-				winnerFound=true;
-				roundWinner=playersList.get(player-1);
+
+		Player roundWinner()
+		{
+			ArrayList<Card> cardsOnTable=table.getroundCards();
+			Card maxCard=cardsOnTable.get(0);
+			Player roundWinner=null;
+			int turnMaxCard=1,cardCount=1;;
+			for(Card c : cardsOnTable){
+				if(c.gettotalWeight()>maxCard.gettotalWeight())
+				{
+					maxCard=c;
+					turnMaxCard=cardCount;
+				}
+					cardCount++;
 			}
-			player++;
+			boolean winnerFound=false;
+			int player=1;
+			while(!winnerFound && player<5){
+				if(playersList.get(player-1).getTurn()==turnMaxCard){
+					winnerFound=true;
+					roundWinner=playersList.get(player-1);
+				}
+				player++;
+			}
+			return roundWinner;
 		}
-		return roundWinner;
-	}
 
-	void setPlayersTurn() {
-		int round=table.getRound();
-		int countPlayer=1;
-		int player=(round%4==0)?4:(round%4) ;
-		while(countPlayer<=4){
-			playersList.get(player-1).setTurn(countPlayer);
-			countPlayer++;
-			player=(((player+1)%5)==0)?1:(player+1);
+		void setPlayersTurn() {
+			int round=table.getRound();
+			int countPlayer=1;
+			int player=(round%4==0)?4:(round%4) ;
+			while(countPlayer<=4){
+				playersList.get(player-1).setTurn(countPlayer);
+				countPlayer++;
+				player=(((player+1)%5)==0)?1:(player+1);
+			}
 		}
-	}
 
-	 void initializePlayers() 
-         {   		for(int player=1;player<=4;player++)
-						playersList.add(new Player("P"+player,table)); // NEW THREAD had been created.
-                        ArrayList <String> playerCard = new ArrayList<String>(); 
-                        playerCard.add("S4 S5 D4 D2 D7 D8 H4 H5 H8 C4 C5 CQ CK");
-                        playerCard.add("S2 SJ SQ SK D3 D5 DJ DQ HQ HK C6 C7 C10");
-                        playerCard.add("S3 S8 S9 S10 D6 D9 D10 H9 H10 HJ C2 C9 CJ");
-                        playerCard.add("S6 S7 SA DK DA H2 H3 H6 H7 HA C3 C8 CA");
+	 	void initializePlayers() 
+         {   		
+			for(int player=1;player<=4;player++)
+				playersList.add(new Player("P"+player,table)); // NEW THREAD had been created.
+				
+				ArrayList <String> playerCard = new ArrayList<String>(); 
+				playerCard.add("S4 S5 D4 D2 D7 D8 H4 H5 H8 C4 C5 CQ CK");
+				playerCard.add("S2 SJ SQ SK D3 D5 DJ DQ HQ HK C6 C7 C10");
+				playerCard.add("S3 S8 S9 S10 D6 D9 D10 H9 H10 HJ C2 C9 CJ");
+				playerCard.add("S6 S7 SA DK DA H2 H3 H6 H7 HA C3 C8 CA");
 
                         String delims = " ";
 		        String line = null;
